@@ -2,17 +2,15 @@ from openai import OpenAI
 from dotenv import load_dotenv
 import os
 
-# Load environment variables from .env file
 load_dotenv()
 
-# Initialize OpenAI client with the API key from the .env file
 client = OpenAI(
-  api_key=os.environ.get('OPENAI_API_KEY')  # Using .get for safer access
+  api_key=os.environ.get('OPENAI_API_KEY')
 )
 
 def find_company_websites(company_names):
     """Finds websites for a list of company names using OpenAI."""
-    websites = {}  # Dictionary to store company names and their websites
+    websites = {} 
     
     for company_name in company_names:
         prompt = f"What is the official website for {company_name}?"

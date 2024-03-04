@@ -40,15 +40,18 @@ def crawl_for_pdfs(url, depth, visited=None):
     
     return list(set(pdf_links))
 
+def write_pdfs_to_file(website, pdfs):
+    filename = f"pdf_links_{website.replace('http://', '').replace('https://', '').split('/')[0]}.txt"
+    with open(filename, 'w') as file:
+        for pdf in pdfs:
+            print(pdf)  # Print each PDF link
+            file.write(pdf + '\n')
+    print(f"PDF links for {website} have been written to {filename}")
+    
+
 if __name__ == "__main__":
-    # start_url = "https://www.pekao.com.pl/en/"
     start_url = "https://www.atlascopcogroup.com/"
 
-    pdfs = crawl_for_pdfs(start_url, depth=10)
+    pdfs = crawl_for_pdfs(start_url, depth=2)
     
-    # Write PDF links to a file
-    with open('pdf_links.txt', 'w') as file:
-        for pdf in pdfs:
-            file.write(pdf + '\n')
-    
-    print(f"PDF links have been written to pdf_links.txt")
+    write_pdfs_to_file(start_url, pdfs)
