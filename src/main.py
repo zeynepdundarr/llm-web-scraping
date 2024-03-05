@@ -8,34 +8,31 @@ def main():
     process_company_pdfs(company_names)
 
 def process_company_pdfs(company_names):
-    # Dictionary to store company websites as keys and list of PDF URLs as values
     company_pdfs = {}
 
-    # Find and store websites
+    # # TEST: Comment out below the code if you are testing it with mock data 
     for name in company_names:
         website = find_company_website(name)
         print(f"{name}: {website}")
         if website != "Website not found.":
-            # Crawl for PDFs and store them directly in the dictionary
             pdfs = crawl_for_pdfs(website, depth=1)
-            if pdfs:  # Check if any PDFs were found
+            if pdfs:
                 company_pdfs[website] = pdfs
-
-    # Iterate over each company website and process its PDFs
     
-    # TODO: mock 
-    company_pdfs = {}           
-    company_pdfs["a.com"] = ['a.pdf, financial.pdf']
-    company_pdfs["b.com"] = ['b.pdf, financial_report.pdf' ]
-    # TODO
+    # # TEST starts: mock company & pdfs key pair set to check 
+    # # whether analyze_url_for_financial_content is working correct
+                
+    # company_pdfs = {}           
+    # company_pdfs["a.com"] = ['a.pdf, financial.pdf']
+    # company_pdfs["b.com"] = ['b.pdf, financial_report.pdf' ]
+    # # TEST ends
     
     result = {} 
     for website, pdfs in company_pdfs.items():
         result[website] = []
         for pdf_url in pdfs:
             result[website].append(analyze_url_for_financial_content(pdf_url))
-
-    print(result.items)
+        print(f"Website {website},\npdfs containing finance related keywords: {result[website]}\n\n")
 
 if __name__ == "__main__":
     main()

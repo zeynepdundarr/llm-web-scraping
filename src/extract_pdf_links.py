@@ -3,6 +3,7 @@ from bs4 import BeautifulSoup
 from urllib.parse import urljoin
 
 def get_all_links(url):
+    # write causes that causes scraping to freeze
     if url == "https://www.pekaobiznes24.pl/do/LangSelect":
         print("Skipping problematic URL")
         return []

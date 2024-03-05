@@ -10,5 +10,5 @@ def extract_company_names_from_excel(file_path, column='E'):
     company_names_set = {sheet.cell(row=i, column=column_number).value for i in range(2, sheet.max_row + 1) if sheet.cell(row=i, column=column_number).value is not None}
     
     company_names_list = list(company_names_set)
-    
-    return company_names_list[:1]
+    # extract 2 companies for test purposes
+    return company_names_list[:2]
