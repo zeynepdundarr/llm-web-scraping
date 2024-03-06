@@ -12,7 +12,7 @@ def find_company_website(company_name):
         "google_domain": "google.com",
         "hl": "en",
         "api_key": api_key,
-        "num": "10"  # Increase the number of results to ensure we have enough to choose from
+        "num": "10"
     }
 
     try:

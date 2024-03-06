@@ -51,7 +51,7 @@ def write_pdfs_to_file(website, pdfs):
     filename = f"pdf_links_{website.replace('http://', '').replace('https://', '').split('/')[0]}.txt"
     with open(filename, 'w') as file:
         for pdf in pdfs:
-            print(pdf)  # Print each PDF link
+            print(pdf)
             file.write(pdf + '\n')
     print(f"PDF links for {website} have been written to {filename}")
     
