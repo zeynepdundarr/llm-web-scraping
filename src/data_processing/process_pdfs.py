@@ -1,9 +1,8 @@
-import os
 from openai import OpenAI
 
-client = OpenAI()
 
 def analyze_url_for_financial_content(url: str) -> str:
+    client = OpenAI()
     prompt = f"Identify if the following text contains financial information: {url}"
     
     response = client.completions.create(
@@ -14,15 +13,3 @@ def analyze_url_for_financial_content(url: str) -> str:
     )
 
     return response.choices[0].text.strip()
-
-
-# Example usage
-if __name__ == "__main__":
-    pdf_urls = ["https://example.com/path/to/financial_report.pdf", "x.pdf"]
-    
-    results = []
-    for url in pdf_urls:
-        results.append(analyze_url_for_financial_content(url))
-       
-    print(results)
-

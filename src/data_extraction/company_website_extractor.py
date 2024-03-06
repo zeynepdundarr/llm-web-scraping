@@ -12,14 +12,20 @@ def find_company_website(company_name):
         "google_domain": "google.com",
         "hl": "en",
         "api_key": api_key,
-        "num": "1"
+        "num": "10"  # Increase the number of results to ensure we have enough to choose from
     }
 
     try:
         search = GoogleSearch(params)
         results = search.get_dict()
         organic_results = results.get("organic_results", [])
-        return organic_results[0].get("link") if organic_results else "Website not found."
+        
+        for result in organic_results:
+            link = result.get("link", "")
+            if "wikipedia" not in link:
+                return link  # Return the first non-Wikipedia link
+        return "Website not found."  # Return this if no non-Wikipedia links are found
+    
     except Exception as e:
         print(f"Error finding website for {company_name}: {e}")
         return "Website not found due to error."

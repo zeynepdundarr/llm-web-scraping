@@ -21,7 +21,13 @@ def get_all_links(url):
 
 
 def filter_pdf_links(links):
-    return [link for link in links if link.lower().endswith('.pdf')]
+    keywords = ["finance", "financial", "financialreport"]
+    filtered_pdf_links = []
+    for link in links:
+        if link.strip().lower().endswith('.pdf'):
+            if any(keyword in link.strip().lower() for keyword in keywords):
+                filtered_pdf_links.append(link)
+    return filtered_pdf_links
 
 def crawl_for_pdfs(url, depth, visited=None):
     if visited is None:

@@ -11,4 +11,4 @@ def extract_company_names_from_excel(file_path, column='E'):
     
     company_names_list = list(company_names_set)
     # extract 2 companies for test purposes
-    return company_names_list[:2]
+    return company_names_list[:5]
