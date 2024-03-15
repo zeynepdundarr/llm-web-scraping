@@ -30,7 +30,7 @@ def process_company_pdfs(company_names):
     company_websites = [('Bank Pekao', 'https://www.pekao.com.pl/'),
      ('Latour', 'Not found'),
      ('Renault', 'https://www.group.renault.com/'),
-     ('Segro', 'https://www.segro.com/'),        
+     ('Segro', 'https://www.segro.com/'),
     ('Freenet', 'https://www.freenet-group.de/'),
     ('Acciona', 'https://www.acciona.com/'),
     ('Caixabank', 'https://www.caixabank.com/'),
@@ -39,9 +39,10 @@ def process_company_pdfs(company_names):
     ('Temenos', 'https://www.temenos.com/'),
     ('BAE Systems', 'https://www.baesystems.com/'),
     ('ACS', 'https://www.grupoacs.com/'),
-    ('', 'https://www.pandoragroup.com/'),
+    ('Pandora', 'https://www.pandoragroup.com/'),
     ('Aveva', 'https://www.aveva.com/'),
     ('HomeServe', 'Not found'),
+    ('CTS Eventim', 'https://www.eventim.de/'),
     ('Accor', 'https://group.accor.com/'),
     ('Wendel', 'https://www.wendelgroup.com/en'),
     ('Reply', 'https://www.reply.com/'),
@@ -53,18 +54,18 @@ def process_company_pdfs(company_names):
     # # comment this out when SERP API KEY is present
     for (name, website) in company_websites:
         if website != "Website not found.":
-            pdfs = crawl_for_pdfs(website, depth=2)
+            pdfs = crawl_for_pdfs_enhanced(website, depth=2)
             if pdfs:
                 company_website_pdfs[(name, website)] = pdfs
                 print(f"{website}: {pdfs}")
 
-    write_filtered_pdfs_to_file(company_website_pdfs, "normal_crawl")
+    write_filtered_pdfs_to_file(company_website_pdfs, "scrapingbee_crawl")
 
 if __name__ == "__main__":
     start_time = time.time()  # Start timing
     main()
     end_time = time.time()  # End timing
     execution_time = end_time - start_time
-    print(f"Normal 5 - Execution time: {execution_time} seconds")
+    print(f"Scrapingbee 5 - Execution time: {execution_time} seconds")
 
 

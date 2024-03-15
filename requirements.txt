@@ -4,3 +4,7 @@ openpyxl==3.1.2
 serpapi==0.1.5
 openai==1.13.3
 pandas==2.2.1
+scrapingbee==2.0.1
+PyPDF2==3.0.1
+pdfminer.six==20231228
+wget==3.2
