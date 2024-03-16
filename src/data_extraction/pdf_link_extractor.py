@@ -4,6 +4,7 @@ from bs4 import BeautifulSoup
 from urllib.parse import urljoin
 import concurrent.futures
 import wget
+from src.data_extraction.pdf_word_scanner import scan_pdf_for_keywords 
 
 def get_all_links_with_timeout(url, timeout=5):
     """Attempt to get all links within a specified timeout."""
@@ -41,13 +42,15 @@ def filter_pdf_links(links):
     filtered_pdf_links = []
     for link in links:
         if link.strip().lower().endswith('.pdf'):
-            if any(keyword in link.strip().lower() for keyword in keywords):
-                filtered_pdf_links.append(link)
-                try:
-                   wget.download(link, '/home/zeynep/Projects/side-projects/llm-project/downloads')
-                except Exception as e:
-                   print(f"Failed to download {link}: {e}")
-
+            for keyword in keywords:
+                if any(keyword in link.strip().lower()) or pdf_word_scanner(keyword):
+                    filtered_pdf_links.append(link)
+                    try:
+                        wget.download(link, '/home/zeynep/Projects/side-projects/llm-project/downloads')
+                    except Exception as e:
+                        print(f"Failed to download {link}: {e}")
+            
+                            
     return filtered_pdf_links
 
 def crawl_for_pdfs(url, depth, visited=None, attempts=3):
@@ -88,16 +91,16 @@ def write_pdfs_to_file(website, pdfs):
     print(f"PDF links for {website} have been written to {filename}")
     
 
-# if __name__ == "__main__":
+if __name__ == "__main__":
     
-#     start_time = time.time()  # Start timing
-#     start_url = "https://www.group.renault.com/"
+    start_time = time.time()  # Start timing
+    start_url = "https://www.pekao.com.pl/"
 
-#     pdfs = crawl_for_pdfs(start_url, depth=2)
+    pdfs = crawl_for_pdfs(start_url, depth=2)
 
-#     write_pdfs_to_file(start_url, pdfs)
+    write_pdfs_to_file(start_url, pdfs)
 
-#     end_time = time.time()  # End timing
-#     execution_time = end_time - start_time
-#     print(f"Normal - Execution time: {execution_time} seconds")
+    end_time = time.time()  # End timing
+    execution_time = end_time - start_time
+    print(f"Normal - Execution time: {execution_time} seconds")
  

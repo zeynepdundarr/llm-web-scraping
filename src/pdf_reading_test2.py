@@ -1,22 +1,32 @@
-import fitz  # PyMuPDF
+
+
+# import packages
+import PyPDF2
+import re
+
 import requests
 
+ #def pdf_word_scanner(pdf_url, keyword):
+
+
+
 def pdf_word_scanner(pdf_url, keyword):
-    try:
-        # Download the PDF file into memory
-        response = requests.get(pdf_url)
-        response.raise_for_status()
-        
-        # Open the PDF from binary data
-        with fitz.open(stream=response.content, filetype="pdf") as doc:
-            text = ""
-            for page in doc:
-                text += page.get_text()
-            if keyword in text.lower():
-                return True
-    except Exception as e:
-        print(f"Failed to scan {pdf_url}: {e}")
-    return False
+    # open the pdf file
+    reader = PyPDF2.PdfReader(pdf_url)
+
+    # get number of pages
+    num_pages = len(reader.pages)
+
+    # extract text and do the search
+    found = False
+    for page in reader.pages:
+        text = page.extract_text() 
+        # print(text)
+        res_search = re.search(keyword, text)
+        print(res_search)
+        found = True
+    return found
+
 
 def filter_pdf_links(links):
     keywords = ["finance", "financial", "financialreport"]
@@ -61,5 +71,5 @@ def filter_pdf_links(links):
                         print(f"Failed to download {link}: {e}")
 
 # Example usage:
-links = ["http://example.com/report_financial.pdf", "/home/zeynep/Projects/side-projects/llm-project/sample_pdfs/sample_pdf_1.pdf.pdf"]
+links = ["https://www.segro.com/media/lgxg3xhc/segro-green-finance-framework.pdf", "https://www.furman.edu/first/wp-content/uploads/sites/168/2020/01/16_oct2324.pdf"]
 filter_pdf_links(links)

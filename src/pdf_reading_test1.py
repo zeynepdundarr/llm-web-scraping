@@ -1,3 +1,4 @@
+
 import fitz  # PyMuPDF
 import requests
 
@@ -48,7 +49,7 @@ def filter_pdf_links(links):
                     try:
                         # Attempt to download the PDF
                         response = requests.get(link)
-                        with open(f'/path/to/download/folder/{link.split("/")[-1]}', 'wb') as f:
+                        with open(f'/home/zeynep/Projects/side-projects/llm-project/downloads/{link.split("/")[-1]}', 'wb') as f:
                             f.write(response.content)
 
                         # Report the findings
@@ -61,5 +62,5 @@ def filter_pdf_links(links):
                         print(f"Failed to download {link}: {e}")
 
 # Example usage:
-links = ["http://example.com/report_financial.pdf", "/home/zeynep/Projects/side-projects/llm-project/sample_pdfs/sample_pdf_1.pdf.pdf"]
+links = ["https://www.segro.com/media/lgxg3xhc/segro-green-finance-framework.pdf"]
 filter_pdf_links(links)

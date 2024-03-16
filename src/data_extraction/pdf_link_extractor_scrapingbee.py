@@ -59,6 +59,10 @@ def filter_pdf_links(links):
                    wget.download(link, '/home/zeynep/Projects/side-projects/llm-project/downloads')
                 except Exception as e:
                    print(f"Failed to download {link}: {e}")
+            # scan inside of pdfs
+            for keyword in keywords:
+                
+
     return filtered_pdf_links
 
 def crawl_for_pdfs_enhanced(url, depth, visited=None, attempts=3):    
