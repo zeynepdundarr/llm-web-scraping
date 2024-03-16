@@ -31,11 +31,11 @@ def filter_pdf_links(links):
                 content_contains_keyword = False
                 keyword_found = ""
                 
-                for keyword in keywords:
-                    if keyword in link.strip().lower():
-                        url_contains_keyword = True
-                        keyword_found = keyword
-                        break  # Stop checking other keywords if one is found
+                # for keyword in keywords:
+                #     if keyword in link.strip().lower():
+                #         url_contains_keyword = True
+                #         keyword_found = keyword
+                #         break  # Stop checking other keywords if one is found
 
                 if not url_contains_keyword:
                     for keyword in keywords:
@@ -62,5 +62,5 @@ def filter_pdf_links(links):
                         print(f"Failed to download {link}: {e}")
 
 # Example usage:
-links = ["https://www.segro.com/media/lgxg3xhc/segro-green-finance-framework.pdf"]
+links = ["https://www.segro.com/media/lgxg3xhc/segro-green-finance-framework.pdf", "https://mediacdn.acciona.com/media/wgigg3am/2021-non-financial-statement-report.pdf"]
 filter_pdf_links(links)
