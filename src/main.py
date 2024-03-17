@@ -1,8 +1,8 @@
 import time
-from data_extraction.company_name_extractor import extract_company_names_from_excel
-from data_extraction.pdf_link_extractor import crawl_for_pdfs
-from src.data_extraction.pdf_link_extractor_scrapingbee import crawl_for_pdfs_enhanced
-from data_extraction.company_website_extractor import find_company_website
+from extraction.company_name_extractor import extract_company_names_from_excel
+from extraction.pdf_link_extractor import crawl_for_pdfs
+from src.extraction.pdf_link_extractor_scrapingbee import crawl_for_pdfs_enhanced
+from extraction.company_website_extractor import find_company_website
 from export.data_to_excel import write_filtered_pdfs_to_file
 
 def main():
