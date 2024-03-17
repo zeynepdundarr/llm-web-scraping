@@ -17,6 +17,7 @@ def filter_pdf_links(links):
                 keyword_found = ""
                 
                 for keyword in keywords:
+                    print("PDF link: ", link)
                     if keyword in link.strip().lower():
                         print("PDF is found with keywords")
                         url_contains_keyword = True

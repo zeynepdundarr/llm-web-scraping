@@ -1,4 +1,3 @@
-# link_extraction.py
 from bs4 import BeautifulSoup
 import requests
 from urllib.parse import urljoin
@@ -13,7 +12,7 @@ def extract_links(url):
     soup = BeautifulSoup(response.text, 'html.parser')
     return [urljoin(url, link['href']) for link in soup.find_all('a', href=True)]
 
-def get_all_links_with_timeout(url, timeout=5):
+def get_all_links_with_timeout(url, timeout=10):
     """Attempt to get all links within a specified timeout."""
     with concurrent.futures.ThreadPoolExecutor(max_workers=1) as executor:
         future = executor.submit(get_all_links, url)
@@ -27,7 +26,6 @@ def get_all_links_with_timeout(url, timeout=5):
             return []
         
 def get_all_links(url):
-    # write causes that causes scraping to freeze
     if url == "https://www.pekaobiznes24.pl/do/LangSelect":
         print("Skipping problematic URL")
         return []

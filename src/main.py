@@ -1,7 +1,6 @@
 import time
 from extraction.company_name_extractor import extract_company_names_from_excel
-from extraction.pdf_link_extractor import crawl_for_pdfs
-from src.extraction.pdf_link_extractor_scrapingbee import crawl_for_pdfs_enhanced
+from src.crawler.pdf_crawler import crawl_for_pdfs
 from extraction.company_website_extractor import find_company_website
 from export.data_to_excel import write_filtered_pdfs_to_file
 
@@ -26,7 +25,7 @@ def process_company_pdfs(company_names):
     # company_websites = [('swisslife', 'https://www.swisslife.com/en/home.html'), ('worldline', 'https://worldline.com/'), ('givaudan','https://www.givaudan.com/')]         
     
     # company_websites = [('worldline', 'https://worldline.com/')]         
-    # 11 : 23 AM
+
     company_websites = [('Bank Pekao', 'https://www.pekao.com.pl/'),
      ('Latour', 'Not found'),
      ('Renault', 'https://www.group.renault.com/'),
@@ -58,12 +57,10 @@ def process_company_pdfs(company_names):
                 company_website_pdfs[(name, website)] = pdfs
                 print(f"{website}: {pdfs}")
 
-    write_filtered_pdfs_to_file(company_website_pdfs, "normal_crawl")
-
 if __name__ == "__main__":
-    start_time = time.time()  # Start timing
+    start_time = time.time()
     main()
-    end_time = time.time()  # End timing
+    end_time = time.time()
     execution_time = end_time - start_time
     print(f"Normal 5 - Execution time: {execution_time} seconds")
 
