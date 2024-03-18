@@ -23,8 +23,8 @@ def find_company_website(company_name):
         for result in organic_results:
             link = result.get("link", "")
             if "wikipedia" not in link:
-                return link  # Return the first non-Wikipedia link
-        return "Website not found."  # Return this if no non-Wikipedia links are found
+                return link
+        return "Website not found."
     
     except Exception as e:
         print(f"Error finding website for {company_name}: {e}")
