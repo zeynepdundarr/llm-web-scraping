@@ -26,6 +26,6 @@ def crawl_for_pdfs(company_name, website, url, depth, visited=None, attempts=3):
     
     for link in links:
         if link not in visited:
-            pdf_links.extend(crawl_for_pdfs("segro", website, link, depth - 1, visited))
+            pdf_links.extend(crawl_for_pdfs(company_name, website, link, depth - 1, visited))
     
     return list(set(pdf_links))

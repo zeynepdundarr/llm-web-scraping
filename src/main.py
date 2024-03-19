@@ -1,29 +1,31 @@
 import time
-from extraction.company_name_extractor import extract_company_names_from_excel
+from src.extraction.company_name_extractor import extract_company_names_from_excel
 from src.crawler.pdf_crawler import crawl_for_pdfs
+from src.extraction.company_website_extractor import find_company_website
 
 def main():
     company_names = extract_company_names_from_excel("./data/input/ai_automation_project.xlsx")
     process_company_pdfs(company_names)
 
 def process_company_pdfs(company_names):
+
+    company_websites = [('Segro', 'https://www.segro.com/')]
+           
+    for (name, website) in company_websites:
+        if website != "Website not found.":
+            crawl_for_pdfs(name, website, website, depth=2)
+
     # # SERP API key Free version is invalid
     # # uncomment this when SERP API KEY is present
     # company_website_pdfs = {}
     # for name in company_names:
     #     website = find_company_website(name)
     #     company_website_pdfs[(name, website)] = []
-    #     print(f"{name}: {website}")
     #     if website != "Website not found.":
-    #         pdfs = crawl_for_pdfs(website, depth=2)
-    #         if pdfs:
-    #             company_website_pdfs[(name, website)] = pdfs
+    #         crawl_for_pdfs(name, website, website, depth=2)
+            
     
     # # mock data is presented in the same format that I obtained from the code patch above, according to the SERP API"
-    # company_websites = [('swisslife', 'https://www.swisslife.com/en/home.html'), ('worldline', 'https://worldline.com/'), ('givaudan','https://www.givaudan.com/')]         
-    
-    # company_websites = [('worldline', 'https://worldline.com/')]         
-
     # company_websites = [('Bank Pekao', 'https://www.pekao.com.pl/'),
     #  ('Latour', 'Not found'),
     #  ('Renault', 'https://www.group.renault.com/'),
@@ -44,13 +46,7 @@ def process_company_pdfs(company_names):
     # ('Reply', 'https://www.reply.com/'),
     # ('Barratt Developments', 'https://www.barrattdevelopments.co.uk/'),
     # ('Inditex', 'https://www.inditex.com/')]
-    
-    company_websites = [('Segro', 'https://www.segro.com/')]    
-
-    company_website_pdfs = {}
-    for (name, website) in company_websites:
-        if website != "Website not found.":
-            crawl_for_pdfs('Segro', 'https://www.segro.com/', 'https://www.segro.com/', depth=2)
+   
      
 
 if __name__ == "__main__":
@@ -58,6 +54,6 @@ if __name__ == "__main__":
     main()
     end_time = time.time()
     execution_time = end_time - start_time
-    print(f"Normal 5 - Execution time: {execution_time} seconds")
+    print(f"Execution time: {execution_time} seconds")
 
 

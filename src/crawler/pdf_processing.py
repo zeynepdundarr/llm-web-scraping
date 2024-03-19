@@ -27,7 +27,7 @@ def filter_pdf_links(company_name, website, links):
                 filtered_pdf_links.append(link)
                 try:
                     response = requests.get(link)
-                    with open(f'/home/zeynep/Projects/side-projects/llm-project/downloads/{link.split("/")[-1]}', 'wb') as f:
+                    with open(f'./downloads/{link.split("/")[-1]}', 'wb') as f:
                         f.write(response.content)
                     append_pdf_to_excel(company_name, website, link)
                 except Exception as e:
