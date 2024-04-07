@@ -7,6 +7,7 @@ from urllib.parse import urljoin
 
 async def get_all_links_with_timeout(session, url):
     # Set a timeout for the request
+    print("get_all_links_with_timeout")
     timeout = aiohttp.ClientTimeout(total=10)
 
     try:
@@ -17,9 +18,10 @@ async def get_all_links_with_timeout(session, url):
             links = []
         async with session.get(url, timeout=timeout) as response:
             # Only parse the page if the content type is HTML
+            print("parsing the page...")
             if 'text/html' in response.headers.get('Content-Type', ''):
-                response = requests.get(url)
-                soup = BeautifulSoup(response.text, 'html.parser')
+                text = await response.text()
+                soup = BeautifulSoup(text, 'lxml')
                 for link in soup.find_all('a', href=True):
                     full_link = urljoin(url, link['href'])
                     links.append(full_link)
@@ -38,6 +40,7 @@ async def parse_links(html_content):
     return links
 
 async def crawl_for_pdfs(company_name, website, url, depth, session, visited=None, attempts=3):
+    print("crawl_for_pdfs")
     if visited is None:
         visited = set()
     if url in visited or depth == 0:
