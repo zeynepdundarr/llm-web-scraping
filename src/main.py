@@ -18,14 +18,15 @@ async def main():
     Links can be filtered by determining if they contain specific English keywords.
     In cases where no English word is detected in the title, the algorithm examines the content of the PDF for optimization purposes. 
     It then checks for the presence of finance-related words across all European languages.
+    The output is saved to the "llm-project/data/output/"Filtered-PDFs-Given-in-Sheet".xlsx" directory.
     """
-    await process_company_pdfs()
+    # await process_company_pdfs()
 
     """
     From the provided Excel input, the algorithm scans the given PDF links to filter out those containing finance-related words in their URLs. 
-    The output is saved to the "llm-project/data/output/" directory.
+    The output is saved to the "llm-project/data/output/Scraped-Website-PDFs.xlsx" directory.
     """ 
-    # await process_given_company_pdfs()
+    await process_given_company_pdfs()
 
 async def process_company_pdfs():
     company_websites = [('Segro', 'https://www.segro.com/')]
