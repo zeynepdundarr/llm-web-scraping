@@ -29,6 +29,7 @@ def filter_pdf_links(company_name, website, links, visited_pdf_links):
                     break
 
             # If the URL does not contain keywords, scan the PDF content
+            # TODO: check if it is working
             if not url_contains_keyword:
                 text = pdf_word_scanner(link, keyword)
                 if text:
@@ -72,6 +73,7 @@ async def filter_given_pdf_links(company_name, link):
             url_contains_keyword = True
             break
 
+# TODO: check if it is working
     # If the URL does not contain keywords, scan the PDF content
     # if not url_contains_keyword:
     #     text = pdf_word_scanner(link, keyword)
@@ -86,7 +88,7 @@ async def filter_given_pdf_links(company_name, link):
     #                 break
 
     if content_contains_keyword or url_contains_keyword:
-        append_pdf_to_excel(company_name, None, link, "Filtered-Given-PDFs-in-Sheet")
+        append_pdf_to_excel(company_name, None, link, "Filtered-PDFs-Given-in-Sheet")
         filtered_pdf_links_struct.append({
             "company_name": company_name,
             "pdf_link": link
