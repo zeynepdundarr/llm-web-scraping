@@ -1,7 +1,8 @@
 import requests
 import fitz
 from langdetect import detect, LangDetectException
-from translator import TranslationDict
+from src.crawler.translator import TranslationDict
+from src.export.data_to_excel import append_pdf_to_excel
 
 def detect_language(text):
     try:
@@ -10,19 +11,18 @@ def detect_language(text):
         print(f"Language detection failed: {e}")
         return None   
 
-def filter_pdf_links(links):
+def filter_pdf_links(company_name, website, links, visited_pdf_links):
     translation_dict = TranslationDict()
     translated_keywords = translation_dict.translated_keywords
-    
-    filtered_pdf_links = []
-
+    url_contains_keyword = False   
+    content_contains_keyword = False  
+    filtered_pdf_links_struct = []
+    print("Filtering pdf links by keywords...")
     for link in links:
-        if link.strip().lower().endswith('.pdf'):
-            url_contains_keyword = False            
-            detected_language = detect(link)
-
+        if not link in visited_pdf_links:
             # Scan URLs for keywords
-            for keyword in translated_keywords.get(detected_language, []):
+            visited_pdf_links.append(link)
+            for keyword in  ["finance", "financial", "financial report"]:
                 if keyword in link:
                     print("Text contains translated keyword:", keyword)
                     url_contains_keyword = True
@@ -32,75 +32,83 @@ def filter_pdf_links(links):
             if not url_contains_keyword:
                 text = pdf_word_scanner(link, keyword)
                 if text:
-                    detected_language = detect(text)
-                
-                    # Now scan the translated text for keywords
-                    for keyword in translated_keywords.get(detected_language, []):
-                        if keyword in text.lower():
-                            print("PDF content contains keyword after translation")
-                            content_contains_keyword = True
-                            break
+                    try:
+                        detected_language = detect(text)
+                    
+                        # Now scan the translated text for keywords
+                        for keyword in translated_keywords.get(detected_language, []):
+                            if keyword in text.lower():
+                                print("PDF content contains keyword after translation")
+                                content_contains_keyword = True
+                                break
+                    except Exception as e:
+                        continue
 
-            if url_contains_keyword:
-                filtered_pdf_links.append(link)
+            if content_contains_keyword or url_contains_keyword:
+                append_pdf_to_excel(company_name, website, link, "Scraped-Website-PDFs")
+            
+                filtered_pdf_links_struct.append({
+                    "company_name": company_name,
+                    "website": website,
+                    "pdf_link": link
+                })
+        else:
+            continue 
+    return filtered_pdf_links_struct
         
-    return filtered_pdf_links
 
-def test_pdf_content_link(text):
+
+async def filter_given_pdf_links(company_name, link):
+
     translation_dict = TranslationDict()
     translated_keywords = translation_dict.translated_keywords
+    url_contains_keyword = False   
+    content_contains_keyword = False  
+    filtered_pdf_links_struct = []
     
-    content_contains_keyword = False
+    for keyword in  ["finance", "financial", "financial report"]:
+        if keyword in link:
+            print("Text contains translated keyword:", keyword)
+            url_contains_keyword = True
+            break
 
-    if text:
-        detected_language = detect(text)
+    # If the URL does not contain keywords, scan the PDF content
+    # if not url_contains_keyword:
+    #     text = pdf_word_scanner(link, keyword)
+    #     if text:
+    #         detected_language = detect(text)
+        
+    #         # Now scan the translated text for keywords
+    #         for keyword in translated_keywords.get(detected_language, []):
+    #             if keyword in text.lower():
+    #                 print("PDF content contains keyword after translation")
+    #                 content_contains_keyword = True
+    #                 break
+
+    if content_contains_keyword or url_contains_keyword:
+        append_pdf_to_excel(company_name, None, link, "Filtered-Given-PDFs-in-Sheet")
+        filtered_pdf_links_struct.append({
+            "company_name": company_name,
+            "pdf_link": link
+        })
+    append_pdf_to_excel()
     
-        # Now scan the translated text for keywords
-        for keyword in translated_keywords.get(detected_language, []):
-            if keyword in text.lower():
-                print("PDF content contains keyword after translation")
-                content_contains_keyword = True
-                break
-
-    return content_contains_keyword
-
+    return filtered_pdf_links_struct
 
 def pdf_word_scanner(pdf_url, keyword):
+    print("Scanning inside the pdf...")
     try:
         response = requests.get(pdf_url)
         response.raise_for_status()
         
         with fitz.open(stream=response.content, filetype="pdf") as doc:
-            text = ""
             for page in doc:
-                text += page.get_text()
-            if keyword in text.lower():
-                return True
+                text = page.get_text()
+                if keyword.lower() in text.lower():
+                    print("Keyword found in the document.")
+                    return text  # Return text of the first page where the keyword is found
+        print("Keyword not found in the document.")
     except Exception as e:
         print(f"Failed to scan {pdf_url}: {e}")
-
-    return False
-
-
-if __name__ == "__main__":      
-
-    german_paragraph_1 = "Die finanzielle Lage des Unternehmens hat sich im letzten Quartal deutlich verbessert. Um weiterhin erfolgreich zu sein, müssen wir unsere Finanzstrategien stetig anpassen. Es ist entscheidend, dass alle Abteilungen eng zusammenarbeiten, um unsere finanziellen Ziele zu erreichen."
-    german_paragraph_2 = "Der Himmel war heute Morgen außergewöhnlich klar und blau. Viele Menschen gingen im Park spazieren, um das schöne Wetter zu genießen. Es wird erwartet, dass die Temperaturen im Laufe der Woche steigen."
-    french_paragraph_1 = "La situation financière de notre entreprise s'est considérablement améliorée au cours du dernier trimestre. Pour continuer à réussir, nous devons constamment adapter nos stratégies financières. Il est crucial que tous les départements travaillent en étroite collaboration pour atteindre nos objectifs financiers."
-    french_paragraph_2 = "Le ciel était exceptionnellement clair et bleu ce matin. Beaucoup de gens se promenaient dans le parc pour profiter du beau temps. Les températures devraient augmenter au cours de la semaine."
-    english_paragraph_1 = "The financial status of the company has significantly improved in the last quarter. To continue being successful, we must constantly adapt our financial strategies. It's critical that all departments work closely together to achieve our financial goals."
-    english_paragraph_2 = "The sky was exceptionally clear and blue this morning. Many people were out walking in the park to enjoy the beautiful weather. Temperatures are expected to rise throughout the week."
-
-    # print("True", test_pdf_content_link(german_paragraph_1))
-    # print("False", test_pdf_content_link(german_paragraph_2))
-    # print("True", test_pdf_content_link(french_paragraph_1))
-    # print("False", test_pdf_content_link(english_paragraph_2))
-    # print("True", test_pdf_content_link(english_paragraph_1))
-    # print("False", test_pdf_content_link(english_paragraph_2))
-
-    print("link: ", filter_pdf_links(['https://example.com/de/bericht-finanziell.pdf']))
-    print("link []:", filter_pdf_links(['https://example.com/de/bericht-nokeyword.pdf']))
-    print("link: ", filter_pdf_links(['https://example.com/fr/rapport-financier.pdf']))
-    print("link []:", filter_pdf_links(['https://example.com/fr/rapport-nokeyword.pdf']))
-    print("link: ", filter_pdf_links(['https://example.com/en/report-financial.pdf']))
-    print("link []:", filter_pdf_links(['https://example.com/en/report-nokeyword.pdf']))
+        return ""
+    return "" 

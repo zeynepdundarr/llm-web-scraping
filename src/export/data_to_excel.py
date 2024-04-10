@@ -5,8 +5,8 @@ from openpyxl import Workbook
 import openpyxl
 from openpyxl import Workbook
 
-def append_pdf_to_excel(company_name, website, pdf_link):
-    filename = "./data/output/company_website_pdf.xlsx"
+def append_pdf_to_excel(company_name, website, pdf_link, filename):
+    filename = f"./data/output/{filename}.xlsx"
     try:
         try:
             workbook = openpyxl.load_workbook(filename)
@@ -20,7 +20,6 @@ def append_pdf_to_excel(company_name, website, pdf_link):
             sheet.append(["Company Name", "Website", "PDF Link"])
 
         sheet.append([company_name, website, pdf_link])
-
         workbook.save(filename)
     except Exception as e:
         print(f"Failed to append to Excel: {e}")
