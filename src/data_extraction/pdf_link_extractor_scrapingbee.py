@@ -29,7 +29,7 @@ def get_all_links(url):
         links = []
         try:
             # response = requests.get(url)
-            client = ScrapingBeeClient(api_key='KXNIOHX7BWQ8RE96MU7YDJY24JWB7CYMVVHT1O1W5GNOEX9X85JBXYHF001CA4JKB2SSJRLIEAD4WIGY')
+            client = ScrapingBeeClient(api_key='YOUR-API-KEY')
             response = client.get(
                 url,
                 params={ 
